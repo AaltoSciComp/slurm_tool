@@ -352,7 +352,7 @@ function rescount {
 
 function version {
     # The below string is automatically replaced by the makeversion script
-    SLURM_TOOL_VERSION='1.0.1'
+    SLURM_TOOL_VERSION='1.0.2'
     echo "$0 tool ${SLURM_TOOL_VERSION}"
     echo $(scontrol -V)
 }
