@@ -107,6 +107,7 @@ Admin commands:
  $self dead
  $self qos <user>
  $self user <user>
+ $self boottime [nodes]
 EOF
     fi
     exit 0
@@ -193,6 +194,9 @@ function commands {
 	top)
 	    top_users "$2"
 	    ;;	    
+	boottime)
+	    node_boot_time "$2"
+	    ;;
 	steps)
 	    shift
 	    jobstat "$@"
@@ -238,6 +242,10 @@ function commands {
 	    usage
 	    ;;
     esac
+}
+
+function node_boot_time {
+    scontrol show node $1 | grep -E "(NodeName|BootTime)" | awk -F "="  'NR % 2 == 1 { odd = $2; next } { print odd, $2 }' |awk -F " " '{ print $3 " " $1}'
 }
 
 function jobstat {
