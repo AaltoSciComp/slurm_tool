@@ -35,7 +35,7 @@ fmt_a_qos="Format=Priority,Name,MaxWall,GrpCPUs,MaxCPUsPerUser"
 fmt_a_user="WithAssoc"
 fmt_top="%u|%j|%C|%m"
 
-cmd_watch="/usr/bin/watch -n 15 --no-title"
+cmd_watch="/usr/bin/watch -n 30 --no-title"
 cmd_queue_size="squeue -S T,P,u,m,C,D,l,t -o"
 cmd_queue_prio="squeue -S T,P,p,u -o"
 cmd_queue_job="squeue -S T,P,-S,-i -o"
