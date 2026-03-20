@@ -365,7 +365,22 @@ function version {
     echo $(scontrol -V)
 }
 
+function check_ext_watch {
+    if ps -o args= -p "$PPID" | grep -q 'watch'; then
+        ext_watch=true
+    fi
+}
+
 commands "$@"
+
+check_ext_watch
+
+if [ "$ext_watch" ]; then
+    self="$(basename "$0")"
+    echo >&2 "WARNING: Do not run 'watch $self [...]', the default interval of 'watch' can cause issues with the slurm controller. Use '$self watch $@' and similar commands instead."
+    usage
+    exit 1
+fi
 
 if [ "$watch" ]; then
     if [ "$header" ]; then
