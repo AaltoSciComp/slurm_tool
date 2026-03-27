@@ -35,7 +35,7 @@ fmt_a_qos="Format=Priority,Name,MaxWall,GrpCPUs,MaxCPUsPerUser"
 fmt_a_user="WithAssoc"
 fmt_top="%u|%j|%C|%m"
 
-cmd_watch="/usr/bin/watch -n 15 --no-title"
+cmd_watch="/usr/bin/watch -n 30 --no-title"
 cmd_queue_size="squeue -S T,P,u,m,C,D,l,t -o"
 cmd_queue_prio="squeue -S T,P,p,u -o"
 cmd_queue_job="squeue -S T,P,-S,-i -o"
@@ -365,7 +365,22 @@ function version {
     echo $(scontrol -V)
 }
 
+function check_ext_watch {
+    if ps -o args= -p "$PPID" | grep -q 'watch'; then
+        ext_watch=true
+    fi
+}
+
 commands "$@"
+
+check_ext_watch
+
+if [ "$ext_watch" ]; then
+    self="$(basename "$0")"
+    echo >&2 "WARNING: Do not run 'watch $self [...]', the default interval of 'watch' can cause issues with the slurm controller. Use '$self watch $@' and similar commands instead."
+    usage
+    exit 1
+fi
 
 if [ "$watch" ]; then
     if [ "$header" ]; then
